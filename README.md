@@ -52,7 +52,7 @@ Click save to save and close the preferences dialog.
 
 **STEP 5:** Download and install the MudletIRC package from:
 
-    <package URL goes here>
+    https://github.com/adayoung/MudletIRC
 
 **STEP 6:** Open Mudlet's IRC client from the menu at Help > IRC. That
 will open the IRC window and since Mudlet does not support supplying a
