@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.001">
+	<TriggerPackage />
+	<TimerPackage />
+	<AliasPackage>
+		<AliasGroup isActive="yes" isFolder="yes">
+			<name>MudletIRC</name>
+			<script></script>
+			<command></command>
+			<packageName></packageName>
+			<regex></regex>
+			<Alias isActive="yes" isFolder="no">
+				<name>IRCTell</name>
+				<script>local message = format_outgoing(matches[2])
+sendIrc('##playground', message)
+format_incoming(nil, 'You', '##playground', message)</script>
+				<command></command>
+				<packageName></packageName>
+				<regex>^irc (.+)$</regex>
+			</Alias>
+		</AliasGroup>
+	</AliasPackage>
+	<ActionPackage />
+	<ScriptPackage>
+		<ScriptGroup isActive="yes" isFolder="yes">
+			<name>MudletIRC</name>
+			<packageName></packageName>
+			<script></script>
+			<eventHandlerList />
+			<Script isActive="yes" isFolder="no">
+				<name>format_outgoing</name>
+				<packageName></packageName>
+				<script>function format_outgoing(what)
+    local modifiers = {
+        [':)'] = 'happily',
+        [':))'] = 'very happily',
+        [':&gt;'] = 'impishly',
+        [':,)'] = 'joyfully',
+        [':@'] = 'angrily',
+        [':('] = 'sadly',
+        [':(('] = 'very sadly',
+        [':#'] = 'irritably',
+        [':d'] = 'laughingly',
+        [':g'] = 'gigglingly', -- Ada/Tesha special ^_^
+        [':b'] = 'longingly',
+        [':p'] = 'jokingly',
+        [':s'] = 'bemusedly',
+        [':/'] = 'sceptically',
+        [':o'] = 'surprisedly',
+    }
+
+    what = string.trim(what)
+    what = string.title(what)
+
+    local _what_lower = string.lower(what)
+    for emote, text in pairs(modifiers) do
+        if string.ends(_what_lower, emote) then
+            what = string.sub(what, 1, string.len(what) - string.len(emote))
+            if not string.starts(what, '*') then
+                if string.len(what) == 0 then
+                    what = "."
+                end
+                what = "*" ..text.. " " ..what
+            end
+        end
+    end
+
+    if string.starts(what, '*') then
+        what = string.split(what, ' ')
+        local modifier = table.remove(what, 1)
+        what = table.concat(what, ' ')
+        what = string.title(what)
+        what = modifier.. " " ..what
+    end
+
+    what = string.trim(what)
+    local _what_last = string.sub(what, -1)
+    if not table.contains({'?', '!', '.'}, _what_last) then
+        what = what.. "."
+    end
+
+    return what
+end
+</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>format_incoming</name>
+				<packageName></packageName>
+				<script>function format_incoming(_, sender, target, message)
+    local output = "(" ..target.. "):"
+    local from = sender
+
+    if from == getIrcNick() then
+        from = 'You'
+    end
+
+    output = output.. " " ..from
+
+    if string.starts(message, '*') then
+        message = string.split(message, ' ')
+        local modifier = table.remove(message, 1)
+        modifier = string.sub(modifier, 2, string.len(modifier))
+        output = output.. " " ..modifier
+        if string.lower(modifier) == 'very' then
+            modifier = table.remove(message, 1)
+            output = output.. " " ..string.lower(modifier)
+        end
+        message = table.concat(message, ' ')
+    end
+
+    output = output.. " say"
+
+    if from ~= 'You' then
+        output = output.. "s"
+    end
+
+    output = output.. ", \"" ..message.. "\"\n"
+    cecho("&lt;DodgerBlue&gt;" .. output)
+end</script>
+				<eventHandlerList />
+			</Script>
+			<Script isActive="yes" isFolder="no">
+				<name>irc_message_received</name>
+				<packageName></packageName>
+				<script>function irc_message_received(_, sender, target, message)
+  local echo_message = true
+
+  -- Let's avoid [WHO] spam
+  if string.starts(message, '[WHO]') then
+    echo_message = false
+  end
+
+  -- Let's avoid the channel noise as well!
+  if string.starts(message, '! ') then
+    echo_message = false
+  end
+
+  if echo_message then
+    format_incoming(nil, sender, target, message)
+  end
+end</script>
+				<eventHandlerList>
+					<string>sysIrcMessage</string>
+				</eventHandlerList>
+			</Script>
+		</ScriptGroup>
+	</ScriptPackage>
+	<KeyPackage />
+	<VariablePackage>
+		<HiddenVariables />
+	</VariablePackage>
+</MudletPackage>
