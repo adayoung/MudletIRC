@@ -61,7 +61,8 @@ requesting you to identify yourself. You can identify yourself with,
 
     /msg NickServ IDENTIFY YourNick YourPassword
 
-Replace YourNick and YourPassword with the correct values.
+Replace YourNick and YourPassword with the correct values. _You'll need
+to do this step every time you connect to the IRC network from Mudlet._
 
 **STEP 7:** Use the 'irc' alias in Mudlet's main window to talk! The IRC
 chat lines will be formatted to resemble an in-game clan for you, except
@@ -86,5 +87,9 @@ yourself.
 
 Welcome to IRC! The wild, wild west of the internet since 1988!
 
-P.S.: Libera is only one of the many IRC networks out there. Do look
-around for more! ^_^
+- Libera is only one of the many IRC networks out there.
+- Mudlet's IRC client remains connected even if you've left the game, do
+`/quit` in the IRC window to disconnect.
+- You cannot be connected to the IRC network with the same nickname from
+two different places. If you try that, one of those places will receive
+a slightly modified nickname as enforced by the network.
