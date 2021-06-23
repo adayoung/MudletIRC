@@ -93,3 +93,5 @@ Welcome to IRC! The wild, wild west of the internet since 1988!
 - You cannot be connected to the IRC network with the same nickname from
 two different places. If you try that, one of those places will receive
 a slightly modified nickname as enforced by the network.
+- Achaea has a new policy against [OOC Combat Communications](https://www.achaea.com/game-help/?what=ooc-combat-communication).
+Don't use IRC for relaying large amounts of combat data in real time!
